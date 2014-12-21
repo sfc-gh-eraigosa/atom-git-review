@@ -38,11 +38,43 @@
 - Fork it and hack on it with github
 - Pull request will only be accepted using gerrit review process on review.forj.io  [Learn more](http://docs.forj.io/en/latest/dev/contribute.html)
 
+## Developing
+Here are a few shortcuts to help developers get started with adding to this plugin with atom.
+- Clone the project
+```shell
+  git clone https://github.com/wenlock/atom-git-review.git
+```
+- Link the source folder to your ~/.atom/packages
+```shell
+  cd atom-git-review
+  apm ln . --dev
+```
+- Install native node modules for your plugin.
+```shell
+  cd atom-git-review
+  npm install
+```
 ## Credits
 - Another great adon for atom, [git-plus](https://atom.io/packages/git-plus).  Credit for much of the structure & framework for this addon can be contributed to that project.
 
 ## Project Status
 
-- This project is far from ready, and only experimental at the moment.  I'm 
+- This project is far from ready, and only experimental at the moment.  I'm
   doing it as a fun project over the holidays to get more familliar with
   atom and what you can do with it.
+
+## TODO
+- still need to implement these functions:
+  "git-review:download-patch",
+  "git-review:submit-branch",
+  "git-review:submit-remote",
+  "git-review:submit-branch-remote",
+  "git-review:topic",
+  "git-review:compare-patch",
+  "git-review:setup-remote",
+
+    "activationEvents": [
+      "git-review:init",
+      "git-review:menu",
+      "git-review:download-change",
+      "git-review:submit"

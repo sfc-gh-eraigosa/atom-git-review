@@ -15,11 +15,11 @@
 review = require '../review'
 StatusView = require '../views/status-view'
 
-ReviewInit = ->
+ReviewVersion = ->
   review.cmd
-    args: ['init'],
+    args: ['--version'],
     stdout: (data) ->
       new StatusView(type: 'success', message: data)
       atom.project.setPath(atom.project.getPath())
 
-module.exports = ReviewInit
+module.exports = ReviewVersion

@@ -15,18 +15,18 @@
 review = require './review'
 
 getCommands = ->
-  ReviewInit             = require './models/review-init'
-  ReviewSubmit           = require './models/review-submit'
+  ReviewVersion            = require './models/review-version'
+  ReviewSubmit             = require './models/review-submit'
   # ReviewDownload         = require './models/review-download'
   # ReviewTopic            = require './models/review-topic'
   # ReviewSetupRemote      = require './models/review-setup-remote'
 
   commands = []
   if atom.project.getRepo()?
-    review.refresh()
     # if atom.workspace.getActiveEditor()?.getPath()?
     #   commands.push ['git-plus:checkout-current-file', 'Checkout Current File', -> GitCheckoutCurrentFile()]
 
+    commands.push ['git-review:version', 'Version', -> ReviewVersion()]
     commands.push ['git-review:submit', 'Review Submit', -> ReviewSubmit()]
     # commands.push ['git-review:download-change', 'Review Download', -> GitAdd(true)]
     # commands.push ['git-review:topic', 'Review Topic', -> GitAdd(true)]
@@ -38,8 +38,6 @@ getCommands = ->
     # "git-review:submit-remote",
     # "git-review:submit-branch-remote",
     # "git-review:compare-patch",
-  else
-    commands.push ['git-review:init', 'Init', -> ReviewInit()]
 
   commands
 

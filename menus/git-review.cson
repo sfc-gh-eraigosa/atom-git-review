@@ -10,6 +10,7 @@
       'label': 'Git Review'
       'submenu': [
         { 'label': 'Review submit', 'command': 'git-review:submit' }
+        { 'label': 'Review version', 'command': 'git-review:version' }
       ]
     ]
   }

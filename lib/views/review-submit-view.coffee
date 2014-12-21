@@ -12,46 +12,39 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 
+Path = require 'path'
+fs = require 'fs-plus'
+
 {$$, BufferedProcess, SelectListView} = require 'atom'
 
-review = require '../review'
-OutputView = require './output-view'
-
 module.exports =
-class ListView extends SelectListView
-  initialize: (@data) ->
+class ReviewSubmitView extends SelectListView
+
+  initialize: (@data, @onlyCurrentFile) ->
     super
     @addClass 'overlay from-top'
     @parseData()
 
   parseData: ->
-    items = @data.split("\n")
+    @data = @data.split("\n")[...-1]
+    @setItems(
+      for item in @data when item != ''
+        {hash: item}
+        # tmp = item.match /([\w\d]{7});\|(.*);\|(.*);\|(.*)/
+        # {hash: tmp?[1], author: tmp?[2], title: tmp?[3], time: tmp?[4]}
+    )
     atom.workspaceView.append this
     @focusFilterEditor()
 
-  getFilterKey: -> 'name'
+  getFilterKey: -> 'title'
 
-  viewForItem: ({name}) ->
+  viewForItem: (commit) ->
     $$ ->
-      @li name
+      @li =>
+        @div class: '', "#{commit.hash}"
+        # @div class: 'text-highlight text-huge', commit.title
+        # @div class: '', "#{commit.hash} by #{commit.author}"
+        # @div class: 'text-info', commit.time
 
-  confirmed: ({name}) ->
-    @execute
+  confirmed: ({hash}) ->
     @cancel()
-
-  execute: ->
-    view = new OutputView()
-    review.cmd
-      args: []
-      stdout: (data) -> view.addLine(data.toString())
-      stderr: (data) -> view.addLine(data.toString())
-      exit: (code) =>
-        if code is 0
-          view.finish()
-        else
-          view.reset()
-          review.cmd
-            args: []
-            stdout: (data) -> view.addLine(data.toString())
-            stderr: (data) -> view.addLine(data.toString())
-            exit: (code) -> view.finish()

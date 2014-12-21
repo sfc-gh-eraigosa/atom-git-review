@@ -1,26 +1,10 @@
-/*
-TODO: need to implement
-"git-review:download-patch",
-"git-review:submit-branch",
-"git-review:submit-remote",
-"git-review:submit-branch-remote",
-"git-review:topic",
-"git-review:compare-patch",
-"git-review:setup-remote",
-
-  "activationEvents": [
-    "git-review:init",
-    "git-review:menu",
-    "git-review:download-change",
-    "git-review:submit"
-*/
 {
   "name": "git-review",
   "main": "./lib/git-review",
   "version": "0.0.1",
   "description": "Use git-review in atom.",
   "activationEvents": [
-    "git-review:init",
+    "git-review:version",
     "git-review:menu",
     "git-review:submit"
   ],
@@ -31,6 +15,7 @@ TODO: need to implement
   },
   "dependencies": {
     "fs-plus": "^2.2.0",
+    "fuzzaldrin": "^1.2.0",
     "underscore-plus": "1.x",
     "emissary": "~1.2.1"
   }

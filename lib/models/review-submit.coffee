@@ -11,13 +11,15 @@
 #    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
-
 review = require '../review'
 ReviewSubmitView = require '../views/review-submit-view'
 
-reviewSubmit = ->
+reviewSubmit = () ->
+  args = ['']
   review.cmd
-    args: [],
+    args: args
+    options:
+      cwd: review.dir(false)
     stdout: (data) -> new ReviewSubmitView(data)
 
 module.exports = reviewSubmit

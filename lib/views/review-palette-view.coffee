@@ -20,7 +20,7 @@ class ReviewPaletteView extends SelectListView
 
   initialize: ->
     super
-    @addClass('git-palette overlay from-top')
+    @addClass('git-review overlay from-top')
     @toggle()
 
   getFilterKey: ->

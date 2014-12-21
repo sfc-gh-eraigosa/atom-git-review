@@ -48,9 +48,9 @@ module.exports =
       description: 'How long should success/error messages be shown?'
 
   activate: (state) ->
-    ReviewInit             = require './models/review-init'
+    ReviewVersion          = require './models/review-version'
     ReviewSubmit           = require './models/review-submit'
 
-    atom.workspaceView.command 'git-review:init', -> ReviewInit()
+    atom.workspaceView.command 'git-review:version', -> ReviewVersion()
     atom.workspaceView.command 'git-review:menu', -> new ReviewPaletteView()
     atom.workspaceView.command 'git-review:submit', -> ReviewSubmit()

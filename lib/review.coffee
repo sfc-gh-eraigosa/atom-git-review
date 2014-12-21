@@ -48,17 +48,18 @@ reviewCmd = ({args, options, stdout, stderr, exit}={}) ->
     stderr: stderr
     exit: exit
 
-reviewDownload = (stdout) ->
+reviewDownload = ({change, stdout, stderr, exit} = {}) ->
   exit ?= (code) ->
     if code is 0
-      new StatusView(type: 'success', message: 'Git Review downloaded change.')
+      new StatusView(type: 'success',
+                     message: 'Git Review downloaded change: #{change}.')
   reviewCmd
     args: ['-d']
     stdout: (data) -> stdout(if data.length > 2 then data.split('\0') else [])
     stderr: stderr if stderr?
     exit: exit
 
-reviewSubmit = (stdout) ->
+reviewSubmit = ({stdout, stderr, exit} = {}) ->
   exit ?= (code) ->
     if code is 0
       new StatusView(type: 'success', message: 'Git Review submitted change.')
@@ -68,7 +69,7 @@ reviewSubmit = (stdout) ->
     stderr: stderr if stderr?
     exit: exit
 
-reviewSetupRemote = (stdout) ->
+reviewSetupRemote = ({stdout, stderr, exit} = {}) ->
   exit ?= (code) ->
     if code is 0
       new StatusView(type: 'success', message: 'Git setup remote set.')
@@ -78,7 +79,7 @@ reviewSetupRemote = (stdout) ->
     stderr: stderr if stderr?
     exit: exit
 
-reviewTopic = (stdout) ->
+reviewTopic = ({stdout, stderr, exit} = {}) ->
   exit ?= (code) ->
     if code is 0
       new StatusView(type: 'success', message: 'Git topic set.')
@@ -131,8 +132,8 @@ getSubmodule = (path) ->
   atom.project.getRepo()?.repo.submoduleForPath(path)
 
 module.exports.cmd = reviewCmd
-module.exports.reviewDownload = gitReviewDownload
-module.exports.reviewSubmit = gitReviewSubmit
+module.exports.reviewDownload = reviewDownload
+module.exports.reviewSubmit = reviewSubmit
 module.exports.reviewSetupRemote = reviewSetupRemote
 module.exports.reviewTopic = reviewTopic
 module.exports.dir = dir
