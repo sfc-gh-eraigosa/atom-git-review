@@ -12,45 +12,54 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 
-{$$, BufferedProcess, SelectListView} = require 'atom'
+Os = require 'os'
+Path = require 'path'
+fs = require 'fs-plus'
 
-review = require '../review'
+{$, BufferedProcess, EditorView, View} = require 'atom'
 StatusView = require './status-view'
-ReviewDownloadSelectChange = require './review-download-select-change'
+review = require '../review'
 
-module.exports =
-class CherryPickSelectBranch extends SelectListView
+module.exports=
+class ReviewDownloadView extends View
 
-  initialize: (items, @currentHead) ->
-    super
-    @addClass 'overlay from-top'
-    @setItems items
+  @content: ->
+    @div class: 'overlay from-top', =>
+      @div class: 'block', =>
+        @subview 'gerritChange', new EditorView(mini: true, placeholderText: 'Gerrit change request')
+      @div class: 'block', =>
+        @subview 'gerritPatch', new EditorView(mini: true, placeholderText: '(optional) Patch Number')
+      @div class: 'block', =>
+        @span class: 'pull-left', =>
+          @button class: 'btn btn-success inline-block-tight gp-confirm-button', click: 'downloadChange', 'pull change'
+        @span class: 'pull-right', =>
+          @button class: 'btn btn-error inline-block-tight gp-cancel-button', click: 'abort', 'Cancel'
 
+  initialize: ->
     atom.workspaceView.append this
-    @focusFilterEditor()
+    @gerritChange.focus()
+    @on 'core:cancel', => @abort()
 
-  viewForItem: (item) ->
-    $$ ->
-      @li item
+  abort: ->
+    @detach()
 
-  confirmed: (item) ->
-    @cancel()
-    args = [
-      'log'
-      '--cherry-pick'
-      '-z'
-      '--format=%H%n%an%n%ar%n%s'
-      "#{@currentHead}...#{item}"
-    ]
-
-    git.cmd
-      args: args
+  downloadChange: ->
+    change = id: @gerritChange.text(), patch: @gerritPatch.text()
+    if /\(optional\) Patch Number/.test(change.patch)
+      change.patch = null
+    # check for bad input, both id and patch should be a integer
+    if !review.isInt(change.id)
+      new StatusView(type: 'alert', message: "change id should be an integer, got #{change.id}")
+      return
+    if typeof(change.patch) != 'undefined' &&
+       change.patch != null &&
+       !review.isInt(change.patch)
+      new StatusView(type: 'alert', message: "patch should be an integer, got #{change.patch}")
+      return
+    review.download
+      id: change.id,
+      patch: change.patch,
       stdout: (data) ->
-        @save ?= ''
-        @save += data
-      exit: (exit) ->
-        if exit is 0 and @save?
-          new CherryPickSelectCommits(@save.split('\0')[...-1])
-          @save = null
-        else
-          new StatusView(type: 'warning', message: "No commits available to cherry-pick.")
+        new StatusView(type: 'success', message: data)
+        atom.project.setPath(atom.project.getPath())
+    @detach()

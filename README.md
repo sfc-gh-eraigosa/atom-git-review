@@ -10,33 +10,29 @@
 ## Usage
 
 ### Git-Review Palette
->- `Cmd-Shift-Alt-R` on MacOS
->- `Ctrl-Shift-Alt-R` on Windows + Linux
+>- `Cmd-Shift-R R` on MacOS
+>- `Ctrl-Shift-R R` on Windows + Linux
 >- `Git Review: Menu` on the atom command palette.
 
 ### Commands
-1. `Review download [change]`
+1. `Review download`
 
   Download a change request from gerrit review system.  This is equivalent to `git-review -d [change]`.
-  Default key binding: `Cmd-Shift-Alt-D`
+  Default key binding: `Cmd-Shift-R D`
 
 2. `Review submit`
 
   Submit a review to gerrit change control system.  This is the same as `git-review`.Will pull up a commit message file.
-  Default key binding: `Cmd-Shift-Alt-S`
+  Default key binding: `Cmd-Shift-R S`
 
-3. `Review setup`
+3. `Review version`
 
   This will setup a remote for the current git project.
-
-4. `Reiew topic [name]`
-
-  Configure a topic for the current review.  This is the same as `git-review -t [name]`
+  Default key binding: `Cmd-Shift-R V`
 
 ## Contributing
 
 - Fork it and hack on it with github
-- Pull request will only be accepted using gerrit review process on review.forj.io  [Learn more](http://docs.forj.io/en/latest/dev/contribute.html)
 
 ## Developing
 Here are a few shortcuts to help developers get started with adding to this plugin with atom.
@@ -59,22 +55,12 @@ Here are a few shortcuts to help developers get started with adding to this plug
 
 ## Project Status
 
-- This project is far from ready, and only experimental at the moment.  I'm
-  doing it as a fun project over the holidays to get more familliar with
-  atom and what you can do with it.
+- This is a fun project and will only be developed as I find time and when the need is truly required for work.
+- This project is very basic in that it provides very bare integration, and requires the user to install git-review with pip.
+- I welcome other to contribute and help improve it, please checkout the TODO's.
 
 ## TODO
-- still need to implement these functions:
-  "git-review:download-patch",
-  "git-review:submit-branch",
-  "git-review:submit-remote",
-  "git-review:submit-branch-remote",
-  "git-review:topic",
-  "git-review:compare-patch",
-  "git-review:setup-remote",
-
-    "activationEvents": [
-      "git-review:init",
-      "git-review:menu",
-      "git-review:download-change",
-      "git-review:submit"
+- create a topic for the review: git-review:topic
+- compare a patch: git-review:compare-patch
+- install git-review with pip, if pip found.
+- git-review setup

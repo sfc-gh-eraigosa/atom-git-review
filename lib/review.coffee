@@ -48,45 +48,31 @@ reviewCmd = ({args, options, stdout, stderr, exit}={}) ->
     stderr: stderr
     exit: exit
 
-reviewDownload = ({change, stdout, stderr, exit} = {}) ->
-  exit ?= (code) ->
-    if code is 0
-      new StatusView(type: 'success',
-                     message: 'Git Review downloaded change: #{change}.')
-  reviewCmd
-    args: ['-d']
-    stdout: (data) -> stdout(if data.length > 2 then data.split('\0') else [])
-    stderr: stderr if stderr?
-    exit: exit
+# download a change request from gerrit
+#
+reviewDownload =({id, patch, options, stdout, stderr, exit} = {}) ->
+  command = _getReviewPath()
+  change = "#{id}"
+  change = "#{change},#{patch}" if typeof(patch) != 'undefined' && patch != null
+  args = ['-d', change]
+  options ?= {}
+  options.cwd ?= dir()
+  stderr ?= (data) -> new StatusView(type: 'alert', message: data.toString())
 
-reviewSubmit = ({stdout, stderr, exit} = {}) ->
-  exit ?= (code) ->
-    if code is 0
-      new StatusView(type: 'success', message: 'Git Review submitted change.')
-  reviewCmd
-    args: []
-    stdout: (data) -> stdout(if data.length > 2 then data.split('\0') else [])
-    stderr: stderr if stderr?
-    exit: exit
+  if stdout? and not exit?
+    c_stdout = stdout
+    stdout = (data) ->
+      @save ?= ''
+      @save += data
+    exit = (exit) ->
+      c_stdout @save ?= ''
 
-reviewSetupRemote = ({stdout, stderr, exit} = {}) ->
-  exit ?= (code) ->
-    if code is 0
-      new StatusView(type: 'success', message: 'Git setup remote set.')
-  reviewCmd
-    args: ['-s']
-    stdout: (data) -> stdout(if data.length > 2 then data.split('\0') else [])
-    stderr: stderr if stderr?
-    exit: exit
-
-reviewTopic = ({stdout, stderr, exit} = {}) ->
-  exit ?= (code) ->
-    if code is 0
-      new StatusView(type: 'success', message: 'Git topic set.')
-  reviewCmd
-    args: ['-t']
-    stdout: (data) -> stdout(if data.length > 2 then data.split('\0') else [])
-    stderr: stderr if stderr?
+  new BufferedProcess
+    command: command
+    args: args
+    options: options
+    stdout: stdout
+    stderr: stderr
     exit: exit
 
 _getReviewPath = ->
@@ -107,6 +93,17 @@ _prettifyDiff = (data) ->
   data = data.split(/^@@(?=[ \-\+\,0-9]*@@)/gm)
   data[1..data.length] = ('@@' + line for line in data[1..])
   data
+
+# check if integer
+isInt = (value) ->
+  # console.log("checking isInt for #{value}")
+  # console.log("isNaN => #{!isNaN(value)}")
+  # console.log("parseInt => #{parseInt(Number(value))}")
+  # console.log("parseInt => #{parseInt(Number(value)) == value}")
+  # console.log("isNaN parseInt => #{!isNaN(parseInt(value, 10))}")
+  # is_int = !isNaN(value) && parseInt(Number(value)) == value && !isNaN(parseInt(value, 10))
+  # console.log("got is_int => #{is_int}")
+  !isNaN(value)
 
 # Returns the root directory for a git repo.
 # Will search for submodule first if currently
@@ -132,10 +129,8 @@ getSubmodule = (path) ->
   atom.project.getRepo()?.repo.submoduleForPath(path)
 
 module.exports.cmd = reviewCmd
-module.exports.reviewDownload = reviewDownload
-module.exports.reviewSubmit = reviewSubmit
-module.exports.reviewSetupRemote = reviewSetupRemote
-module.exports.reviewTopic = reviewTopic
+module.exports.download = reviewDownload
 module.exports.dir = dir
 module.exports.relativize = relativize
 module.exports.getSubmodule = getSubmodule
+module.exports.isInt = isInt

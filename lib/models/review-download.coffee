@@ -13,13 +13,17 @@
 #    limitations under the License.
 
 review = require '../review'
-StatusView = require '../views/status-view'
+ReviewDownloadView = require '../views/review-download-view'
 
 ReviewDownload = ->
-  git.cmd
-    args: ['-d'],
-    stdout: (data) ->
-      new StatusView(type: 'success', message: data.toString())
-      atom.project.getRepo()?.refreshStatus()
+  atomGit = atom.project.getRepo(atom.workspace.getActiveEditor()?.getPath())
+  heads = atomGit.getReferences().heads
+  currentHead = atomGit.getShortHead()
+
+  for head, i in heads
+    heads[i] = head.replace('refs/heads/', '')
+
+  heads = heads.filter (head) -> head isnt currentHead
+  new ReviewDownloadView(heads, currentHead)
 
 module.exports = ReviewDownload

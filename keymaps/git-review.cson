@@ -8,12 +8,14 @@
 # For more detailed documentation see
 # https://atom.io/docs/latest/advanced/keymaps
 
-'.platform-darwin':
-  'cmd-shift-alt-r': 'git-review:menu'
-  'cmd-shift-alt-d': 'git-review:download-change'
-  'cmd-shift-alt-s': 'git-review:submit'
+'.platform-dain':
+  'cmd-shift-r r': 'git-review:menu'
+  'cmd-shift-r d': 'git-review:download'
+  'cmd-shift-r s': 'git-review:submit'
+  'cmd-shift-r v': 'git-review:version'
 
 '.platform-win32, .platform-linux':
-  'ctrl-shift-alt-r': 'git-review:menu'
-  'ctrl-shift-alt-d': 'git-review:download-change'
-  'ctrl-shift-alt-s': 'git-review:submit'
+  'ctrl-shift-r r': 'git-review:menu'
+  'ctrl-shift-r d': 'git-review:download'
+  'ctrl-shift-r s': 'git-review:submit'
+  'ctrl-shift-r v': 'git-review:version'
