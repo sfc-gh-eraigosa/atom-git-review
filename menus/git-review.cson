@@ -1,0 +1,16 @@
+# See https://atom.io/docs/latest/creating-a-package#menus for more details
+# { 'label': 'Review download', 'command': 'git-review:download-change' }
+# { 'label': 'Review submit', 'command': 'git-review:submit' }
+# { 'label': 'Review setup', 'command': 'git-review:setup-remote' }
+# { 'label': 'Review topic', 'command': 'git-review:topic' }
+'menu': [
+  {
+    'label': 'Packages'
+    'submenu': [
+      'label': 'Git Review'
+      'submenu': [
+        { 'label': 'Review submit', 'command': 'git-review:submit' }
+      ]
+    ]
+  }
+]
