@@ -7,6 +7,9 @@
 
   Visit the project on github to learn more about  [git-review](https://github.com/openstack-infra/git-review).
 
+
+  ![A screenshot git-review in](https://raw.githubusercontent.com/wenlock/atom-git-review/master/commit.gif)
+
 ## Usage
 
 ### Git-Review Palette
