@@ -54,7 +54,7 @@ Here are a few shortcuts to help developers get started with adding to this plug
   npm install
 ```
 ## Credits
-- Another great adon for atom, [git-plus](https://atom.io/packages/git-plus).  Credit for much of the structure & framework for this addon can be contributed to that project.
+- Another great addon for atom, [git-plus](https://atom.io/packages/git-plus).  Credit for much of the structure & framework for this addon can be contributed to that project.
 
 ## Project Status
 
