@@ -21,16 +21,19 @@
 1. `Review download`
 
   Download a change request from gerrit review system.  This is equivalent to `git-review -d [change]`.
+  
   Default key binding: `Cmd-Shift-R D`
 
 2. `Review submit`
 
   Submit a review to gerrit change control system.  This is the same as `git-review`.Will pull up a commit message file.
+  
   Default key binding: `Cmd-Shift-R S`
 
 3. `Review version`
 
   Check what version of git-review you have available.
+  
   Default key binding: `Cmd-Shift-R V`
 
 ## Contributing
