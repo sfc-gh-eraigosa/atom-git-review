@@ -30,7 +30,7 @@
 
 3. `Review version`
 
-  This will setup a remote for the current git project.
+  Check what version of git-review you have available.
   Default key binding: `Cmd-Shift-R V`
 
 ## Contributing
