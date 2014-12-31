@@ -15,7 +15,7 @@ review = require '../review'
 ReviewSubmitView = require '../views/review-submit-view'
 
 reviewSubmit = () ->
-  args = ['']
+  args = []
   review.cmd
     args: args
     options:

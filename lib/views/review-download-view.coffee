@@ -47,7 +47,6 @@ class ReviewDownloadView extends View
     atom.workspaceView.append this
     @gerritChange.focus()
     @on 'core:cancel', => @abort()
-    console.log('before keywatcher')
     @keywatcher1 = new KeyWatcher()
     @keywatcher1.keybind $(document), 'enter', null, this, @downloadChange
     @keywatcher2 = new KeyWatcher()
@@ -103,12 +102,9 @@ class ReviewDownloadView extends View
       remove_method = @removeKeyWatchers
       parent_instance = this
 
-    console.log("change => #{change}")
-    console.log("patch => #{patch}")
     return if change == null
     change = id: change, patch: patch
-    console.log("change -> #{change.id}")
-    console.log("keyready => #{this.keyready}")
+    console.log("change => #{change}")
     return if /Gerrit change request/.test(change.id)
 
     # handel the change
@@ -152,29 +148,7 @@ class ReviewDownloadView extends View
       remove_method = @removeKeyWatchers
       parent_instance = this
 
-    console.log("ready => #{ready}")
     return if ready == null
     remove_method.call(parent_instance)
     parent_instance.detach()
     console.log('clicked abort')
-
-  # downloadChange: ->
-  #   change = id: @gerritChange.text(), patch: @gerritPatch.text()
-  #   if /\(optional\) Patch Number/.test(change.patch)
-  #     change.patch = null
-  #   # check for bad input, both id and patch should be a integer
-  #   if !review.isInt(change.id)
-  #     new StatusView(type: 'alert', message: "change id should be an integer, got #{change.id}")
-  #     return
-  #   if typeof(change.patch) != 'undefined' &&
-  #      change.patch != null &&
-  #      !review.isInt(change.patch)
-  #     new StatusView(type: 'alert', message: "patch should be an integer, got #{change.patch}")
-  #     return
-  #   review.download
-  #     id: change.id,
-  #     patch: change.patch,
-  #     stdout: (data) ->
-  #       new StatusView(type: 'success', message: data)
-  #       atom.project.setPath(atom.project.getPath())
-  #   @detach()

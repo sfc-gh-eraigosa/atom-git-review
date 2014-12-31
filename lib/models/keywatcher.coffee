@@ -26,7 +26,6 @@ class KeyWatcher
 
   keybind: (objdoc, thekey, themodifier, parent_this, callback) ->
     console.log("initializing key watcher #{thekey}")
-    console.log("callback -> #{callback}")
     @watchkey = thekey
     @watchmodifier = themodifier
     @subscribe objdoc, "keyup", (e) => @keyUpAction(e, callback, parent_this)
@@ -35,13 +34,6 @@ class KeyWatcher
     {key, modifiers} = @keystrokeForKeyboardEvent(event)
     return unless key
     console.log("key to watch -> #{this.watchkey}")
-    # console.log(event)
-    console.log("key -> #{key}")
-    console.log("modifiers -> #{modifiers}")
-    console.log(RegExp('^'+ this.watchkey + '$').test key )
-    console.log(this.watchmodifier == null )
-    console.log((RegExp('^'+ this.watchkey + '$').test key ) &&
-                (this.watchmodifier == null ))
     if ( (RegExp('^'+ this.watchkey + '$').test key) &&
          (this.watchmodifier == null) ) ||
        ( (RegExp('^'+ this.watchkey + '$').test key) &&
