@@ -59,7 +59,7 @@ Here are a few shortcuts to help developers get started with adding to this plug
 - Publish
 ```shell
   apm login
-  apm publish --tag 0.1.2
+  apm publish v0.1.2
 ```
 ## Credits
 - Another great addon for atom, [git-plus](https://atom.io/packages/git-plus).  Credit for much of the structure & framework for this addon can be contributed to that project.
