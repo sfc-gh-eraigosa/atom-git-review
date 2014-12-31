@@ -21,19 +21,19 @@
 1. `Review download`
 
   Download a change request from gerrit review system.  This is equivalent to `git-review -d [change]`.
-  
+
   Default key binding: `Cmd-Shift-R D`
 
 2. `Review submit`
 
   Submit a review to gerrit change control system.  This is the same as `git-review`.Will pull up a commit message file.
-  
+
   Default key binding: `Cmd-Shift-R S`
 
 3. `Review version`
 
   Check what version of git-review you have available.
-  
+
   Default key binding: `Cmd-Shift-R V`
 
 ## Contributing
@@ -55,6 +55,11 @@ Here are a few shortcuts to help developers get started with adding to this plug
 ```shell
   cd atom-git-review
   npm install
+```
+- Publish
+```shell
+  apm login
+  apm publish --tag v$(grep '"version":' package.json | awk -F: '{print $2}'|sed 's/[\",\s]//g')
 ```
 ## Credits
 - Another great addon for atom, [git-plus](https://atom.io/packages/git-plus).  Credit for much of the structure & framework for this addon can be contributed to that project.
