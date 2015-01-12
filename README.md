@@ -50,16 +50,17 @@ Here are a few shortcuts to help developers get started with adding to this plug
 ```shell
   cd atom-git-review
   apm ln . --dev
+  apm linked
 ```
 - Install native node modules for your plugin.
 ```shell
   cd atom-git-review
-  npm install
+  apm install
 ```
 - Publish
 ```shell
   apm login
-  apm publish v0.1.2
+  apm publish v0.1.3
 ```
 ## Credits
 - Another great addon for atom, [git-plus](https://atom.io/packages/git-plus).  Credit for much of the structure & framework for this addon can be contributed to that project.

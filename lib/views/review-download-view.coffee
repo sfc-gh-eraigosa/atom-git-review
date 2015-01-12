@@ -89,18 +89,22 @@ class ReviewDownloadView extends View
     # from event keys.
     if (typeof instance_this) != 'undefined' &&
        (typeof this.gerritChange) == 'undefined'
-      change = instance_this.gerritChange.text()
-      patch  = instance_this.gerritPatch.text()
+      change = instance_this.gerritChange.getText()
+      patch  = instance_this.gerritPatch.getText()
       ready  = instance_this.keyready
       remove_method = instance_this.removeKeyWatchers
       parent_instance = instance_this
 
     if (typeof this.gerritChange) != 'undefined'
-      change = @gerritChange.text()
-      patch  = @gerritPatch.text()
+      change = this.gerritChange.getText()
+      patch  = this.gerritPatch.getText()
       ready  = @keyready
       remove_method = @removeKeyWatchers
       parent_instance = this
+
+    # check for empty values and set to null if found
+    change = null if change == ''
+    patch  = null if patch == ''
 
     return if change == null
     change = id: change, patch: patch
