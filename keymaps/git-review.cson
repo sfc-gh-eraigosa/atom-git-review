@@ -12,10 +12,12 @@
   'cmd-shift-r r': 'git-review:menu'
   'cmd-shift-r d': 'git-review:download'
   'cmd-shift-r s': 'git-review:submit'
+  'cmd-shift-r l': 'git-review:list'
   'cmd-shift-r v': 'git-review:version'
 
 '.platform-win32, .platform-linux':
   'ctrl-shift-r r': 'git-review:menu'
   'ctrl-shift-r d': 'git-review:download'
   'ctrl-shift-r s': 'git-review:submit'
+  'ctrl-shift-r l': 'git-review:list'
   'ctrl-shift-r v': 'git-review:version'

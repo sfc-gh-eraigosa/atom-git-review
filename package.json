@@ -1,12 +1,13 @@
 {
   "name": "git-review",
   "main": "./lib/git-review",
-  "version": "0.1.3",
+  "version": "0.2.0",
   "description": "Use git-review in atom.",
   "activationEvents": [
     "git-review:version",
     "git-review:menu",
     "git-review:submit",
+    "git-review:list",
     "git-review:download"
   ],
   "repository": "https://github.com/wenlock/atom-git-review",

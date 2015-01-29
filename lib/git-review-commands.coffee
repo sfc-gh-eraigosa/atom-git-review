@@ -17,7 +17,8 @@ review = require './review'
 getCommands = ->
   ReviewVersion            = require './models/review-version'
   ReviewSubmit             = require './models/review-submit'
-  ReviewDownload         = require './models/review-download'
+  ReviewDownload           = require './models/review-download'
+  ReviewList               = require './models/review-list'
   # ReviewTopic            = require './models/review-topic'
   # ReviewSetupRemote      = require './models/review-setup-remote'
 
@@ -29,6 +30,7 @@ getCommands = ->
     commands.push ['git-review:version', 'Version', -> ReviewVersion()]
     commands.push ['git-review:submit', 'Review Submit', -> ReviewSubmit()]
     commands.push ['git-review:download', 'Review Download', -> ReviewDownload()]
+    commands.push ['git-review:list', 'Review List', -> ReviewList()]
     # commands.push ['git-review:topic', 'Review Topic', -> GitAdd(true)]
     # commands.push ['git-review:setup-remote', 'Review Setup', -> GitAdd(true)]
 

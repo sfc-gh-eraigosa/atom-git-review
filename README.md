@@ -30,7 +30,14 @@
 
   Default key binding: `Cmd-Shift-R S`
 
-3. `Review version`
+3. `Review list`
+  List current review open on a project to select to download from.
+  This is equivalent to:
+    `git-review -l`
+
+  Default key binding: `Cmd-Shift-R l`
+
+4. `Review version`
 
   Check what version of git-review you have available.
 

@@ -10,6 +10,8 @@
       'label': 'Git Review'
       'submenu': [
         { 'label': 'Review submit', 'command': 'git-review:submit' }
+        { 'label': 'Review download', 'command': 'git-review:download' }
+        { 'label': 'Review list', 'command': 'git-review:list' }
         { 'label': 'Review version', 'command': 'git-review:version' }
       ]
     ]

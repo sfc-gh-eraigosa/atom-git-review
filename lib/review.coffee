@@ -70,6 +70,10 @@ reviewDownload =({id, patch, options, stdout, stderr, exit} = {}) ->
     exit = (exit) ->
       c_stdout @save ?= ''
 
+  console.log(" executing command -> #{command}")
+  console.log(" args              -> #{args}")
+  console.log(" options           -> #{options}")
+  console.log(" options.cwd       -> #{options.cwd}")
   new BufferedProcess
     command: command
     args: args

@@ -51,8 +51,10 @@ module.exports =
     ReviewVersion          = require './models/review-version'
     ReviewSubmit           = require './models/review-submit'
     ReviewDownload         = require './models/review-download'
+    ReviewList             = require './models/review-list'
 
     atom.workspaceView.command 'git-review:version', -> ReviewVersion()
     atom.workspaceView.command 'git-review:menu', -> new ReviewPaletteView()
     atom.workspaceView.command 'git-review:submit', -> ReviewSubmit()
     atom.workspaceView.command 'git-review:download', -> ReviewDownload()
+    atom.workspaceView.command 'git-review:list', -> ReviewList()
