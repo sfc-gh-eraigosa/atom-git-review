@@ -10,7 +10,7 @@
 #    distributed under the License is distributed on an "AS IS" BASIS,
 #    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 _ = require 'underscore-plus'
-{$, $$, SelectListView} = require 'atom'
+{$, $$, SelectListView} = require 'atom-space-pen-views'
 review = require '../review'
 ReviewCommands = require '../git-review-commands'
 fuzzy = require('../models/fuzzy').filter
@@ -20,17 +20,21 @@ class ReviewPaletteView extends SelectListView
 
   initialize: ->
     super
-    @addClass('git-review overlay from-top')
+    @addClass('git-review')
     @toggle()
 
   getFilterKey: ->
     'description'
 
   toggle: ->
-    if @hasParent()
+    if @panel?.isVisible()
       @cancel()
     else
-      @attach()
+      @show()
+
+  show: ->
+    @panel ?= atom.workspace.addModalPanel(item: this)
+    @panel.show()
 
   attach: ->
     @storeFocusedElement()
@@ -47,7 +51,6 @@ class ReviewPaletteView extends SelectListView
     commands = _.sortBy(commands, 'name')
     @setItems(commands)
 
-    atom.workspaceView.append(this)
     @focusFilterEditor()
 
   populateList: ->
@@ -75,6 +78,9 @@ class ReviewPaletteView extends SelectListView
       @selectItemView(@list.find('li:first'))
     else
       @setError(@getEmptyMessage(@items.length, filteredItems.length))
+
+  hide: ->
+    @panel?.hide()
 
   viewForItem: ({name, description}, matchedStr) ->
     $$ ->

@@ -12,13 +12,10 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 
-{Subscriber} = require 'emissary'
-{$, ScrollView} = require 'atom'
+{$, ScrollView} = require 'atom-space-pen-views'
 
 module.exports =
   class OutputView extends ScrollView
-    Subscriber.includeInto (this)
-
     message: ''
 
     @content: ->
@@ -27,8 +24,7 @@ module.exports =
 
     initialize: ->
       super
-      atom.workspaceView.appendToBottom(this)
-      @subscribe $(window), 'core:cancel', => @detach()
+      @panel ?= atom.workspace.addBottomPanel(item: this)
 
     addLine: (line) ->
       @message += line
@@ -39,9 +35,8 @@ module.exports =
     finish: ->
       @find(".output").append(@message)
       setTimeout =>
-        @detach()
+        @destroy()
       , atom.config.get('git-review.messageTimeout') * 1000
 
-    detach: ->
-      super
-      @unsubscribe()
+    destroy: ->
+      @panel?.destroy()

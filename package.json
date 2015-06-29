@@ -1,15 +1,22 @@
 {
   "name": "git-review",
   "main": "./lib/git-review",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Use git-review in atom.",
-  "activationEvents": [
-    "git-review:version",
-    "git-review:menu",
-    "git-review:submit",
-    "git-review:list",
-    "git-review:download"
+  "keywords": [
+    "gerrit",
+    "git",
+    "review"
   ],
+  "activationCommands": {
+    "atom-workspace": [
+       "git-review:version",
+       "git-review:menu",
+       "git-review:submit",
+       "git-review:list",
+       "git-review:download"
+    ]
+  },
   "repository": "https://github.com/wenlock/atom-git-review",
   "license": "Apache2",
   "engines": {
@@ -19,6 +26,6 @@
     "fs-plus": "^2.2.0",
     "fuzzaldrin": "^1.2.0",
     "underscore-plus": "1.x",
-    "emissary": "~1.2.1"
+    "atom-space-pen-views": "^2.0.3"
   }
 }

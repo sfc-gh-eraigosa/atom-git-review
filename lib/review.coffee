@@ -13,7 +13,7 @@
 #    limitations under the License.
 
 {BufferedProcess} = require 'atom'
-StatusView = require './views/status-view'
+notifier = require './notifier'
 
 # Public: Execute git-review command line
 #
@@ -29,7 +29,7 @@ reviewCmd = ({args, options, stdout, stderr, exit}={}) ->
   command = _getReviewPath()
   options ?= {}
   options.cwd ?= dir()
-  stderr ?= (data) -> new StatusView(type: 'alert', message: data.toString())
+  stderr ?= (data) -> notifier.addError data.toString()
 
   if stdout? and not exit?
     c_stdout = stdout
@@ -60,7 +60,7 @@ reviewDownload =({id, patch, options, stdout, stderr, exit} = {}) ->
   args = ['-d', change]
   options ?= {}
   options.cwd ?= dir()
-  stderr ?= (data) -> new StatusView(type: 'alert', message: data.toString())
+  stderr ?= (data) -> notifier.addError data.toString()
 
   if stdout? and not exit?
     c_stdout = stdout

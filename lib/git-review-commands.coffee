@@ -40,6 +40,6 @@ getCommands = ->
     # "git-review:submit-branch-remote",
     # "git-review:compare-patch",
 
-  commands
+  return commands
 
 module.exports = getCommands
