@@ -15,6 +15,10 @@
 {$} = require 'atom'
 review = require './review'
 ReviewPaletteView = require './views/review-palette-view'
+ReviewVersion          = require './models/review-version'
+ReviewSubmit           = require './models/review-submit'
+ReviewDownload         = require './models/review-download'
+ReviewList             = require './models/review-list'
 
 module.exports =
   config:
@@ -48,13 +52,9 @@ module.exports =
       description: 'How long should success/error messages be shown?'
 
   activate: (state) ->
-    ReviewVersion          = require './models/review-version'
-    ReviewSubmit           = require './models/review-submit'
-    ReviewDownload         = require './models/review-download'
-    ReviewList             = require './models/review-list'
 
-    atom.workspaceView.command 'git-review:version', -> ReviewVersion()
-    atom.workspaceView.command 'git-review:menu', -> new ReviewPaletteView()
-    atom.workspaceView.command 'git-review:submit', -> ReviewSubmit()
-    atom.workspaceView.command 'git-review:download', -> ReviewDownload()
-    atom.workspaceView.command 'git-review:list', -> ReviewList()
+    atom.commands.add 'atom-workspace', 'git-review:version', -> ReviewVersion()
+    atom.commands.add 'atom-workspace', 'git-review:menu', -> new ReviewPaletteView()
+    atom.commands.add 'atom-workspace', 'git-review:submit', -> ReviewSubmit()
+    atom.commands.add 'atom-workspace', 'git-review:download', -> ReviewDownload()
+    atom.commands.add 'atom-workspace', 'git-review:list', -> ReviewList()

@@ -15,7 +15,9 @@
 Path = require 'path'
 fs = require 'fs-plus'
 
-{$$, BufferedProcess, SelectListView} = require 'atom'
+{BufferedProcess} = require 'atom'
+{$$, SelectListView} = require 'atom-space-pen-views'
+
 
 module.exports =
 class ReviewSubmitView extends SelectListView

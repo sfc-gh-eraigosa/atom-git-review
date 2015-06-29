@@ -16,8 +16,10 @@ Os = require 'os'
 Path = require 'path'
 fs = require 'fs-plus'
 
-{$$, SelectListView} = require 'atom'
-StatusView = require './status-view'
+{BufferedProcess} = require 'atom'
+{$$, SelectListView} = require 'atom-space-pen-views'
+
+notifier = require '../notifier'
 review = require '../review'
 
 module.exports=
@@ -68,5 +70,5 @@ class ReviewListView extends SelectListView
       id: item.id,
       patch: null,
       stdout: (data) ->
-        new StatusView(type: 'success', message: data)
+        notifier.addSuccess data
         atom.project.setPath(atom.project.getPath())

@@ -13,13 +13,12 @@
 #    limitations under the License.
 
 review = require '../review'
-StatusView = require '../views/status-view'
+notifier = require '../notifier'
 
 ReviewVersion = ->
   review.cmd
     args: ['--version'],
     stdout: (data) ->
-      new StatusView(type: 'success', message: data)
-      atom.project.setPath(atom.project.getPath())
+      notifier.addSuccess data
 
 module.exports = ReviewVersion

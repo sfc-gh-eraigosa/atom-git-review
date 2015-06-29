@@ -12,8 +12,8 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 
-{BufferedProcess} = require 'atom'
-StatusView = require './views/status-view'
+{BufferedProcess, GitRepository} = require 'atom'
+notifier = require './notifier'
 
 # Public: Execute git-review command line
 #
@@ -29,7 +29,7 @@ reviewCmd = ({args, options, stdout, stderr, exit}={}) ->
   command = _getReviewPath()
   options ?= {}
   options.cwd ?= dir()
-  stderr ?= (data) -> new StatusView(type: 'alert', message: data.toString())
+  stderr ?= (data) -> notifier.addError data.toString()
 
   if stdout? and not exit?
     c_stdout = stdout
@@ -60,7 +60,7 @@ reviewDownload =({id, patch, options, stdout, stderr, exit} = {}) ->
   args = ['-d', change]
   options ?= {}
   options.cwd ?= dir()
-  stderr ?= (data) -> new StatusView(type: 'alert', message: data.toString())
+  stderr ?= (data) -> notifier.addError data.toString()
 
   if stdout? and not exit?
     c_stdout = stdout
@@ -112,32 +112,63 @@ isInt = (value) ->
   # console.log("got is_int => #{is_int}")
   !isNaN(value)
 
-# Returns the root directory for a git repo.
+# Returns the working directory for a git repo.
 # Will search for submodule first if currently
 #   in one or the project root
 #
-# @param submodules boolean determining whether to account for submodules
-dir = (submodules=true) ->
-  found = false
-  if submodules
-    if submodule = getSubmodule()
-      found = submodule.getWorkingDirectory()
-  if not found
-    found = atom.project.getRepo()?.getWorkingDirectory() ? atom.project.getPath()
-  found
+# @param andSubmodules boolean determining whether to account for submodules
+dir = (andSubmodules=true) ->
+  new Promise (resolve, reject) ->
+    if andSubmodules and submodule = getSubmodule()
+      resolve(submodule.getWorkingDirectory())
+    else
+      getRepo().then (repo) -> resolve(repo.getWorkingDirectory())
 
-# returns filepath relativized for either a submodule, repository or a project
+# returns filepath relativized for either a submodule or repository
+#   otherwise just a full path
 relativize = (path) ->
-  getSubmodule(path)?.relativize(path) ? atom.project.getRepo()?.relativize(path) ? atom.project.relativize(path)
+  getSubmodule(path)?.relativize(path) ? atom.project.getRepositories()[0]?.relativize(path) ? path
 
 # returns submodule for given file or undefined
 getSubmodule = (path) ->
-  path ?= atom.workspace.getActiveEditor()?.getPath()
-  atom.project.getRepo()?.repo.submoduleForPath(path)
+  path ?= atom.workspace.getActiveTextEditor()?.getPath()
+  repo = GitRepository.open(atom.workspace.getActiveTextEditor()?.getPath(), refreshOnWindowFocus: false)
+  submodule = repo?.repo.submoduleForPath(path)
+  repo?.destroy?()
+  submodule
+
+# Public: Get the repository of the current file or project if no current file
+# Returns a {Promise} that resolves to a repository like object
+getRepo = ->
+  new Promise (resolve, reject) ->
+    getRepoForCurrentFile().then (repo) -> resolve(repo)
+    .catch (e) ->
+      repos = atom.project.getRepositories().filter (r) -> r?
+      if repos.length is 0
+        reject("No repos found")
+      else if repos.length > 1
+        resolve(new RepoListView(repos).result)
+      else
+        resolve(repos[0])
+
+getRepoForCurrentFile = ->
+  new Promise (resolve, reject) ->
+    project = atom.project
+    path = atom.workspace.getActiveTextEditor()?.getPath()
+    directory = project.getDirectories().filter((d) -> d.contains(path))[0]
+    if directory?
+      project.repositoryForDirectory(directory).then (repo) ->
+        submodule = repo.repo.submoduleForPath(path)
+        if submodule? then resolve(submodule) else resolve(repo)
+      .catch (e) ->
+        reject(e)
+    else
+      reject "no current file"
 
 module.exports.cmd = reviewCmd
 module.exports.download = reviewDownload
 module.exports.dir = dir
 module.exports.relativize = relativize
 module.exports.getSubmodule = getSubmodule
+module.exports.getRepo = getRepo
 module.exports.isInt = isInt
