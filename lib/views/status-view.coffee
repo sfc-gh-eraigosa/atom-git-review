@@ -19,7 +19,7 @@ module.exports =
     Subscriber.includeInto(this)
 
     @content = (params) ->
-      @div class: 'git-review overlay from-bottom', =>
+      @div class: 'git-review atom-panel.modal from-bottom', =>
         @div class: "#{params.type} message", params.message
 
     initialize: ->
