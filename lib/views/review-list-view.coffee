@@ -16,7 +16,6 @@ Os = require 'os'
 Path = require 'path'
 fs = require 'fs-plus'
 
-{BufferedProcess} = require 'atom'
 {$$, SelectListView} = require 'atom-space-pen-views'
 
 notifier = require '../notifier'
@@ -37,16 +36,25 @@ class ReviewListView extends SelectListView
         @span branch
         @span title
 
-  initialize:(data) ->
+  initialize:(@data) ->
     super
-    @addClass 'overlay from-top'
-    @setItems @parseData data
+    @parseData
     atom.workspaceView.append this
-    @focusFilterEditor()
+    @currentPane = atom.workspace.getActivePane()
     console.log("initialize ReviewListView")
 
-  parseData: (lines) ->
-    for line in lines when line != '' && /^(.*)\[0m\s(.*)\[0m\s(.*)/.test line
+  show: ->
+    @panel ?= atom.workspace.addModalPanel(item: this)
+    @panel.show()
+    @storeFocusedElement()
+
+  cancelled: -> @hide()
+
+  hide: ->
+    @panel?.destroy()
+
+  parseData: ->
+    for line in @data when line != '' && /^(.*)\[0m\s(.*)\[0m\s(.*)/.test line
       line = line.replace(/\[[1-9]+m/g,'')
       parse_data = line.match /^(.*)\[0m\s(.*)\[0m\s(.*)/
       if parse_data.length > 0
@@ -58,13 +66,16 @@ class ReviewListView extends SelectListView
 
   confirmed: (item) ->
     console.log "item -> #{item.id} selected"
+    @reviewpull item
     @cancel()
+
+  reviewpull: (item) ->
+    # clean id
     if typeof(item.id) == 'undefined' ||
        item.id == null ||
        item.id == ''
       console.log "nothing to download for id => #{item.id}"
       return
-    # clean id
     item.id = item.id.replace(RegExp(String.fromCharCode(27),'g'),'')
     review.download
       id: item.id,
@@ -72,3 +83,10 @@ class ReviewListView extends SelectListView
       stdout: (data) ->
         notifier.addSuccess data
         atom.project.setPath(atom.project.getPath())
+      stderr: (data) =>
+        notifier.addSuccess data.toString()
+        atom.workspace.observeTextEditors (editor) =>
+          if filepath = editor.getPath()
+            fs.exists filepath, (exists) =>
+              editor.destroy() if not exists
+        @currentPane.activate()
