@@ -19,16 +19,16 @@ notifier = require './notifier'
 #
 # options - An {Object} with the following keys:
 #   :args    - The {Array} containing the arguments to pass.
+#   :cwd  - Current working directory as {String}.
 #   :options - The {Object} with options to pass.
-#     :cwd  - Current working directory as {String}.
 #   :stdout  - The {Function} to pass the stdout to.
 #   :exit    - The {Function} to pass the exit code to.
 #
 # Returns nothing.
-reviewCmd = ({args, options, stdout, stderr, exit}={}) ->
+reviewCmd = ({args, cwd, options, stdout, stderr, exit}={}) ->
   command = _getReviewPath()
   options ?= {}
-  options.cwd ?= dir()
+  options.cwd ?= cwd
   stderr ?= (data) -> notifier.addError data.toString()
 
   if stdout? and not exit?
@@ -39,17 +39,18 @@ reviewCmd = ({args, options, stdout, stderr, exit}={}) ->
     exit = (exit) ->
       c_stdout @save ?= ''
       @save = null
-  console.log(" executing command -> #{command}")
-  console.log(" args              -> #{args}")
-  console.log(" options           -> #{options}")
-  console.log(" options.cwd       -> #{options.cwd}")
-  new BufferedProcess
-    command: command
-    args: args
-    options: options
-    stdout: stdout
-    stderr: stderr
-    exit: exit
+
+  try
+    new BufferedProcess
+      command: command
+      args: args
+      options: options
+      stdout: stdout
+      stderr: stderr
+      exit: exit
+  catch error
+    notifier.addError 'Git Review is unable to locate git-review command. Please ensure process.env.PATH can access git-review.'
+
 
 # download a change request from gerrit
 #

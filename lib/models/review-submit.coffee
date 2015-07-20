@@ -14,12 +14,11 @@
 review = require '../review'
 ReviewSubmitView = require '../views/review-submit-view'
 
-reviewSubmit = () ->
+reviewSubmit = (repo) ->
   args = []
   review.cmd
     args: args
-    options:
-      cwd: review.dir(false)
+    cwd: repo.getWorkingDirectory()
     stdout: (data) -> new ReviewSubmitView(data)
 
 module.exports = reviewSubmit

@@ -15,7 +15,7 @@
 review = require '../review'
 notifier = require '../notifier'
 
-ReviewVersion = ->
+ReviewVersion = (repo) ->
   review.cmd
     args: ['--version'],
     stdout: (data) ->

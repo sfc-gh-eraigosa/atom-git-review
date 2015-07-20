@@ -15,13 +15,13 @@
 review = require '../review'
 ReviewListView = require '../views/review-list-view'
 
-ReviewList = ->
+ReviewList = (repo) ->
   args = ['-l']
   review.cmd
     args: args
-    options:
-      cwd: review.dir(false)
-    stdout: (data) -> new ReviewListView(data.split('\n'))
+    cwd: repo.getWorkingDirectory()
+    stdout: (data) -> console.log(data.split('\n'))
+#    stdout: (data) -> new ReviewListView(data.split('\n'))
 
 
 module.exports = ReviewList

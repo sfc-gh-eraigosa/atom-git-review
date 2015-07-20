@@ -23,8 +23,6 @@ review = require '../review'
 
 module.exports=
 class ReviewListView extends SelectListView
-  constructor: ->
-    super
 
   viewForItem: ({id, branch, title}) ->
     $$ ->
@@ -38,8 +36,8 @@ class ReviewListView extends SelectListView
 
   initialize:(@data) ->
     super
-    @parseData
-    atom.workspaceView.append this
+    @show()
+    @parseData()
     @currentPane = atom.workspace.getActivePane()
     console.log("initialize ReviewListView")
 

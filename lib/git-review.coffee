@@ -53,8 +53,8 @@ module.exports =
 
   activate: (state) ->
 
-    atom.commands.add 'atom-workspace', 'git-review:version', -> ReviewVersion()
+    atom.commands.add 'atom-workspace', 'git-review:version', -> review.getRepo().then((repo) -> ReviewVersion(repo))
     atom.commands.add 'atom-workspace', 'git-review:menu', -> new ReviewPaletteView()
-    atom.commands.add 'atom-workspace', 'git-review:submit', -> ReviewSubmit()
-    atom.commands.add 'atom-workspace', 'git-review:download', -> ReviewDownload()
-    atom.commands.add 'atom-workspace', 'git-review:list', -> ReviewList()
+    atom.commands.add 'atom-workspace', 'git-review:submit', -> review.getRepo().then((repo) -> ReviewSubmit(repo))
+    atom.commands.add 'atom-workspace', 'git-review:download', -> review.getRepo().then((repo) -> ReviewDownload(repo))
+    atom.commands.add 'atom-workspace', 'git-review:list', -> review.getRepo().then((repo) -> ReviewList(repo))
