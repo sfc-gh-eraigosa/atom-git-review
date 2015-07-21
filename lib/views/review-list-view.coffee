@@ -27,14 +27,13 @@ class ReviewListView extends SelectListView
   viewForItem: ({id, branch, title}) ->
     $$ ->
       @li =>
-        @div
-          class: 'pull-right highlight'
-          style: 'white-space: pre-wrap; font-family: monospace'
-        @span id
-        @span branch
-        @span title
+        @div class: 'pull-right highlight',
+             style: 'white-space: pre-wrap; font-family: monospace', =>
+               @span id
+               @span branch
+               @span title
 
-  initialize:(@data) ->
+  initialize:(@repo, @data) ->
     super
     @show()
     @parseData()
@@ -52,15 +51,20 @@ class ReviewListView extends SelectListView
     @panel?.destroy()
 
   parseData: ->
-    for line in @data when line != '' && /^(.*)\[0m\s(.*)\[0m\s(.*)/.test line
-      line = line.replace(/\[[1-9]+m/g,'')
-      parse_data = line.match /^(.*)\[0m\s(.*)\[0m\s(.*)/
-      if parse_data.length > 0
-        {
+    items = @data.split("\n")
+    changes = []
+#    for line in items when line != '' && /^(.*)\[0m\s(.*)\[0m\s(.*)/.test line
+    for item in items when item != ''
+      item = item.replace(/\[[1-9]+m/g,'')
+      parse_data = item.match(/^([0-9]+)\s+(\w+)\s+(.*)/)
+      if parse_data != null && parse_data.length > 0
+        changes.push {
           id: parse_data[1].replace(/\[0m/,''),
           branch: parse_data[2].replace(/\[0m/,''),
           title: parse_data[3]
         }
+    @setItems changes
+    @focusFilterEditor()
 
   confirmed: (item) ->
     console.log "item -> #{item.id} selected"
@@ -78,6 +82,7 @@ class ReviewListView extends SelectListView
     review.download
       id: item.id,
       patch: null,
+      cwd: @repo.getWorkingDirectory(),
       stdout: (data) ->
         notifier.addSuccess data
         atom.project.setPath(atom.project.getPath())

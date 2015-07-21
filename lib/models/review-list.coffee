@@ -20,8 +20,7 @@ ReviewList = (repo) ->
   review.cmd
     args: args
     cwd: repo.getWorkingDirectory()
-    stdout: (data) -> console.log(data.split('\n'))
-#    stdout: (data) -> new ReviewListView(data.split('\n'))
+    stdout: (data) -> new ReviewListView(repo, data)
 
 
 module.exports = ReviewList
