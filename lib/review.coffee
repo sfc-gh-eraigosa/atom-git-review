@@ -54,11 +54,16 @@ reviewCmd = ({args, cwd, options, stdout, stderr, exit}={}) ->
 
 # download a change request from gerrit
 #
-reviewDownload =({id, patch, options, stdout, stderr, exit} = {}) ->
-  command = _getReviewPath()
+reviewDownload = ({id, patch, cwd, options, stdout, stderr, exit}={}) ->
   change = "#{id}"
   change = "#{change},#{patch}" if typeof(patch) != 'undefined' && patch != null
   args = ['-d', change]
+
+  command = _getReviewPath()
+  options ?= {}
+  options.cwd ?= cwd
+  stderr ?= (data) -> notifier.addError data.toString()
+
   options ?= {}
   options.cwd ?= dir()
   stderr ?= (data) -> notifier.addError data.toString()
@@ -70,18 +75,23 @@ reviewDownload =({id, patch, options, stdout, stderr, exit} = {}) ->
       @save += data
     exit = (exit) ->
       c_stdout @save ?= ''
+      @save = null
+
+  try
+    new BufferedProcess
+      command: command
+      args: args
+      options: options
+      stdout: stdout
+      stderr: stderr
+      exit: exit
+  catch error
+    notifier.addError 'Git Review is unable to locate git-review command. Please ensure process.env.PATH can access git-review.'
 
   console.log(" executing command -> #{command}")
   console.log(" args              -> #{args}")
   console.log(" options           -> #{options}")
   console.log(" options.cwd       -> #{options.cwd}")
-  new BufferedProcess
-    command: command
-    args: args
-    options: options
-    stdout: stdout
-    stderr: stderr
-    exit: exit
 
 _getReviewPath = ->
   atom.config.get('git-review.getReviewPath') ? 'git-review'

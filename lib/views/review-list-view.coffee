@@ -79,10 +79,11 @@ class ReviewListView extends SelectListView
       console.log "nothing to download for id => #{item.id}"
       return
     item.id = item.id.replace(RegExp(String.fromCharCode(27),'g'),'')
+
     review.download
-      id: item.id,
-      patch: null,
-      cwd: @repo.getWorkingDirectory(),
+      id: item.id
+      patch: null
+      cwd: @repo.getWorkingDirectory()
       stdout: (data) ->
         notifier.addSuccess data
         atom.project.setPath(atom.project.getPath())
