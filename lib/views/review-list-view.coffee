@@ -86,11 +86,15 @@ class ReviewListView extends SelectListView
       cwd: @repo.getWorkingDirectory()
       stdout: (data) ->
         notifier.addSuccess data
-        atom.project.setPath(atom.project.getPath())
       stderr: (data) =>
         notifier.addSuccess data.toString()
-        atom.workspace.observeTextEditors (editor) =>
-          if filepath = editor.getPath()
-            fs.exists filepath, (exists) =>
-              editor.destroy() if not exists
-        @currentPane.activate()
+#      stdout: (data) ->
+#        notifier.addSuccess data
+#        atom.project.setPath(atom.project.getPath())
+#      stderr: (data) =>
+#        notifier.addSuccess data.toString()
+#        atom.workspace.observeTextEditors (editor) =>
+#          if filepath = editor.getPath()
+#            fs.exists filepath, (exists) =>
+#              editor.destroy() if not exists
+#        @currentPane.activate()
