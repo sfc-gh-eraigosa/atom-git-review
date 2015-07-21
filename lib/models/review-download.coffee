@@ -17,7 +17,13 @@ ReviewDownloadView = require '../views/review-download-view'
 
 ReviewDownload = (repo) ->
   #?? repo.getWorkingDirectory()
-  atomGit = atom.project.getRepo(atom.workspace.getActiveEditor()?.getPath())
+  atomGit = null
+  for r in atom.project.getRepositories()
+    if repo.getWorkingDirectory in r.getPath
+      atomGit = r
+  if atomGit == null
+    return
+
   heads = atomGit.getReferences().heads
   currentHead = atomGit.getShortHead()
 
